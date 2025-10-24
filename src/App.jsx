@@ -4,7 +4,7 @@ import { Button } from './components/ui/button'
 const App = () => {
   return (
     <div>
-      <Button>Hellow wolrd</Button>
+      <Button className="bg-primary-blue">Hellow wolrd</Button>
     </div>
   )
 }
