@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card'
 import { Link } from 'react-router'
 import PasswordInput from '@/components/ui/password-input'
+import { Checkbox } from '@/components/ui/checkbox'
 
 const SignUp = () => {
   return (
@@ -26,6 +27,21 @@ const SignUp = () => {
           <Input placeholder="Digite seu e-mail" />
           <PasswordInput />
           <PasswordInput placeholder="Digite sua senha novamente" />
+
+          <div className="items-top flex gap-2">
+            <Checkbox id="terms" defaultChecked />
+            <div className="grid gap-2">
+              <label
+                htmlFor="terms"
+                className="text-xs text-muted-foreground opacity-75"
+              >
+                Ao clicar em “Criar conta”, você aceita{' '}
+                <a href="#" className="text-primary-foreground underline">
+                  nosso termo de uso e política de privacidade.
+                </a>
+              </label>
+            </div>
+          </div>
         </CardContent>
         <CardFooter>
           <Button className="w-full">Criar conta</Button>
