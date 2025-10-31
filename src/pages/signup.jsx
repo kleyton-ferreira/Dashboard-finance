@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -74,7 +74,7 @@ const SignUp = () => {
       <Form {...methods}>
         <form onSubmit={methods.handleSubmit(handleSubmit)}>
           <Card className="w-[500px]">
-            <CardHeader>
+            <CardHeader className="text-center">
               <CardTitle>Crie a sua Conta</CardTitle>
               <CardDescription> Insira seus dados abaixo. </CardDescription>
             </CardHeader>
