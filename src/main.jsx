@@ -9,6 +9,7 @@ import SignUp from './pages/signup'
 import LoginPage from './pages/login'
 import NotFoundPage from './pages/not-found'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Toaster } from 'sonner'
 
 const queryClient = new QueryClient()
 
@@ -23,6 +24,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
+      <Toaster />
     </QueryClientProvider>
   </StrictMode>
 )

@@ -20,7 +20,7 @@ const PasswordInput = forwardRef(
           onClick={() => setPasswordIsVisible((prev) => !prev)}
           type="button"
         >
-          {passwordIsVisible ? <EyeOffIcon /> : <EyeIcon />}
+          {passwordIsVisible ? <EyeIcon /> : <EyeOffIcon />}
         </Button>
       </div>
     )

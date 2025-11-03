@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -24,6 +24,9 @@ import {
 import { useForm } from 'react-hook-form'
 
 import { z } from 'zod'
+import { useMutation } from '@tanstack/react-query'
+import { api } from '@/lib/axios'
+import { toast } from 'sonner'
 
 const signupSchema = z.object({
   firstName: z.string().trim().min(1, {
@@ -53,6 +56,21 @@ const signupSchema = z.object({
 })
 
 const SignUp = () => {
+  const [user, setUser] = useState(null)
+
+  const signupMutation = useMutation({
+    mutationKey: ['signup'],
+    mutationFn: async (variables) => {
+      const response = await api.post('/users', {
+        first_name: variables.firstName,
+        last_name: variables.lastName,
+        email: variables.email,
+        password: variables.password,
+      })
+      return response.data
+    },
+  })
+
   const methods = useForm({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -66,7 +84,25 @@ const SignUp = () => {
   })
 
   const handleSubmit = (data) => {
-    console.log(data)
+    signupMutation.mutate(data, {
+      onSuccess: (createUser) => {
+        const accessToken = createUser.tokens.accessToken
+        const refreshToken = createUser.tokens.refreshToken
+        setUser(createUser)
+        localStorage.setItem('accessToken', accessToken)
+        localStorage.setItem('refreshToken', refreshToken)
+        toast.success('Conta criada com sucesso!')
+      },
+      onError: () => {
+        toast.error(
+          'Erro eo criar conta. Por favor tente novamente mais tarde.'
+        )
+      },
+    })
+  }
+
+  if (user) {
+    return <h1>Olá, {user.first_name}!</h1>
   }
 
   return (
