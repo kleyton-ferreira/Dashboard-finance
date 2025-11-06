@@ -44,7 +44,6 @@ const loginSchema = z.object({
 
 const LoginPage = () => {
   const [user, setUser] = useState(null)
-
   const loginMutation = useMutation({
     mutationKey: ['login'],
     mutationFn: async (variables) => {
