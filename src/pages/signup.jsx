@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -25,7 +25,7 @@ import { useForm } from 'react-hook-form'
 
 import { z } from 'zod'
 
-import { AuthContext } from '@/context/auth'
+import { useAuthContext } from '@/context/auth'
 
 const signupSchema = z
   .object({
@@ -60,7 +60,7 @@ const signupSchema = z
   })
 
 const SignUp = () => {
-  const { user, signup } = useContext(AuthContext)
+  const { user, signup } = useAuthContext()
 
   const methods = useForm({
     resolver: zodResolver(signupSchema),
