@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 
 export const AuthContext = createContext({
   user: null,
+  isInicialized: true,
   login: () => {},
   signup: () => {},
 })
@@ -25,6 +26,7 @@ const removeTokens = () => {
 }
 
 export const AuthContextProvider = ({ children }) => {
+  const [isInicialized, setIsInicialized] = useState(true)
   const [user, setUser] = useState()
 
   // SIGNUP
@@ -44,6 +46,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const init = async () => {
       try {
+        setIsInicialized(true)
         const accessToken = localStorage.getItem(LOCAL_STORAGE_ACESS_TOKEN_KEY)
         const refreshToken = localStorage.getItem(
           LOCAL_STORAGE_REFRESH_TOKEN_KEY
@@ -56,8 +59,11 @@ export const AuthContextProvider = ({ children }) => {
         })
         setUser(response.data)
       } catch (error) {
+        setUser(null)
         removeTokens()
         console.error(error)
+      } finally {
+        setIsInicialized(false)
       }
     }
     init()
@@ -109,6 +115,7 @@ export const AuthContextProvider = ({ children }) => {
         user,
         login,
         signup,
+        isInicialized,
       }}
     >
       {children}

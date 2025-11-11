@@ -9,7 +9,7 @@ import {
   CardContent,
   CardFooter,
 } from '@/components/ui/card'
-import { Link } from 'react-router'
+import { Link, Navigate } from 'react-router'
 import PasswordInput from '@/components/ui/password-input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -60,7 +60,7 @@ const signupSchema = z
   })
 
 const SignUp = () => {
-  const { user, signup } = useAuthContext()
+  const { user, signup, isInicialized } = useAuthContext()
 
   const methods = useForm({
     resolver: zodResolver(signupSchema),
@@ -76,8 +76,10 @@ const SignUp = () => {
 
   const handleSubmit = (data) => signup(data)
 
+  if (isInicialized) return null
+
   if (user) {
-    return <h1>Olá, {user.first_name}!</h1>
+    return <Navigate to="/" />
   }
 
   return (

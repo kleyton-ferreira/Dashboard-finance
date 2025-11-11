@@ -22,7 +22,7 @@ import {
 import { Input } from '@/components/ui/input'
 import PasswordInput from '@/components/ui/password-input'
 import { Button } from '@/components/ui/button'
-import { Link } from 'react-router'
+import { Link, Navigate } from 'react-router'
 import { useAuthContext } from '@/context/auth'
 
 const loginSchema = z.object({
@@ -41,7 +41,7 @@ const loginSchema = z.object({
 })
 
 const LoginPage = () => {
-  const { user, login } = useAuthContext()
+  const { user, login, isInicialized } = useAuthContext()
 
   const methods = useForm({
     resolver: zodResolver(loginSchema),
@@ -53,8 +53,10 @@ const LoginPage = () => {
 
   const handleSubmit = (data) => login(data)
 
+  if (isInicialized) return null
+
   if (user) {
-    return <h1>Olá, {user.first_name}!</h1>
+    return <Navigate to="/" />
   }
 
   return (
