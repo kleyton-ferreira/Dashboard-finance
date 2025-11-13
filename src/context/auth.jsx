@@ -18,11 +18,13 @@ export const AuthContext = createContext({
 export const useAuthContext = () => useContext(AuthContext)
 
 const setTokens = (tokens) => {
+  // AQUI FOI COLOCADO O IMPORTE DA CHAVE DO ARQUIVO DE CONSTANTES => ( local-storage.js )
   localStorage.setItem(LOCAL_STORAGE_ACESS_TOKEN_KEY, tokens.accessToken)
   localStorage.setItem(LOCAL_STORAGE_REFRESH_TOKEN_KEY, tokens.refreshToken)
 }
 
 const removeTokens = () => {
+  // AQUI FOI COLOCADO O IMPORTE DA CHAVE DO ARQUIVO DE CONSTANTES => ( local-storage.js )
   localStorage.removeItem(LOCAL_STORAGE_ACESS_TOKEN_KEY)
   localStorage.removeItem(LOCAL_STORAGE_REFRESH_TOKEN_KEY)
 }
@@ -62,7 +64,6 @@ export const AuthContextProvider = ({ children }) => {
         setUser(response.data)
       } catch (error) {
         setUser(null)
-        removeTokens()
         console.error(error)
       } finally {
         setIsInicialized(false)
