@@ -2,7 +2,7 @@ import {
   LOCAL_STORAGE_ACESS_TOKEN_KEY,
   LOCAL_STORAGE_REFRESH_TOKEN_KEY,
 } from '@/constants/local-storage'
-import { protectedApi } from '@/lib/axios'
+
 import { UserService } from '@/services/user'
 import { useMutation } from '@tanstack/react-query'
 import { createContext, useContext, useEffect, useState } from 'react'
@@ -52,12 +52,8 @@ export const AuthContextProvider = ({ children }) => {
           LOCAL_STORAGE_REFRESH_TOKEN_KEY
         )
         if (!accessToken && !refreshToken) return
-        const response = await protectedApi.get('/users/me', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        setUser(response.data)
+        const response = await UserService.me()
+        setUser(response)
       } catch (error) {
         setUser(null)
         console.error(error)
