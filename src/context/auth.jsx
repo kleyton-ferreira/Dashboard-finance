@@ -43,6 +43,8 @@ export const AuthContextProvider = ({ children }) => {
     },
   })
 
+  console.log({ user })
+
   useEffect(() => {
     const init = async () => {
       try {
