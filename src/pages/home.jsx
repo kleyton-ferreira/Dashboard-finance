@@ -1,10 +1,11 @@
 import { useAuthContext } from '@/context/auth'
 import { Navigate } from 'react-router'
 import React from 'react'
-import { Button } from '@/components/ui/button'
+
+import Header from '@/components/ui/header'
 
 const HomePage = () => {
-  const { user, isInicialized, signOut } = useAuthContext()
+  const { user, isInicialized } = useAuthContext()
   if (isInicialized) return null
 
   if (!user) {
@@ -13,8 +14,7 @@ const HomePage = () => {
 
   return (
     <>
-      <h1>Olá, {user.first_name} </h1>
-      <Button onClick={signOut}>Sair</Button>
+      <Header />
     </>
   )
 }
