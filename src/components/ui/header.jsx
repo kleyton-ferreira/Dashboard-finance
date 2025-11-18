@@ -29,9 +29,9 @@ const Header = () => {
           <div>
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <Button onClick={() => setOpen(!open)} variant="outline">
+                <Button variant="outline">
                   <Avatar className="relative -left-1 h-8 w-8">
-                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarImage src="" />
                     <AvatarFallback>
                       <p className="text-[12px]">
                         {user.firstName[0]} {user.lastName[0]}
