@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { addMonths } from 'date-fns'
+
+import { DatePickerWithRange } from '@/components/ui/date-picker-with-ranger'
 
 const DateSelection = () => {
+  const [date, setDate] = useState({
+    from: new Date(),
+    to: addMonths(new Date(), 1),
+  })
   return (
     <div>
-      <h1></h1>
+      <DatePickerWithRange value={date} onChange={setDate} />
     </div>
   )
 }
