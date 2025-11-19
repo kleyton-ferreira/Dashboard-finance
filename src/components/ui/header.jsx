@@ -31,7 +31,7 @@ const Header = () => {
               <DropdownMenuTrigger>
                 <Button variant="outline">
                   <Avatar className="relative -left-1 h-8 w-8">
-                    <AvatarImage src="" />
+                    <AvatarImage src="https://github.com/shadcn.png" />
                     <AvatarFallback>
                       <p className="text-[12px]">
                         {user.firstName[0]} {user.lastName[0]}
