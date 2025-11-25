@@ -3,12 +3,16 @@ import { addMonths, format } from 'date-fns'
 
 import { DatePickerWithRange } from '@/components/ui/date-picker-with-ranger'
 import { useNavigate, useSearchParams } from 'react-router'
+import { useQueryClient } from '@tanstack/react-query'
+import { useAuthContext } from '@/context/auth'
 
 const formatDateToQueryParam = (date) => format(date, 'yyyy-MM-dd')
 
 const DateSelection = () => {
+  const queryClient = useQueryClient()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const { user } = useAuthContext()
 
   const [date, setDate] = useState({
     from: searchParams.get('from')
@@ -25,11 +29,13 @@ const DateSelection = () => {
     const queryParams = new URLSearchParams()
     queryParams.set('from', formatDateToQueryParam(date.from))
     queryParams.set('to', formatDateToQueryParam(date.to))
-
-    if (date.from && date.to) {
-      navigate(`/?${queryParams.toString()}`)
-    }
-  }, [navigate, date])
+    navigate(`/?${queryParams.toString()}`)
+    queryClient.invalidateQueries([
+      {
+        queryKey: ['balance', user.id],
+      },
+    ])
+  }, [navigate, date, queryClient, user.id])
 
   // 2ª - QUANDO  EU RECARREGAR A PAGINA, EU PEGO O FROM E O TO DA URL E PERSISTO NO STATE
 

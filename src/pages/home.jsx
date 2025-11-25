@@ -6,6 +6,7 @@ import Header from '@/components/ui/header'
 import DateSelection from '@/components/ui/data-selection'
 import { Button } from '@/components/ui/button'
 import { PlusIcon } from 'lucide-react'
+import Balance from '@/components/ui/balance'
 
 const HomePage = () => {
   const { user, isInicialized } = useAuthContext()
@@ -20,7 +21,7 @@ const HomePage = () => {
       <Header />
 
       {/* PARTE DO TOPO */}
-      <div className="p-8">
+      <div className="space-y-6 p-8">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">Dashboard</h2>
           <div className="flex items-center gap-3">
@@ -31,6 +32,9 @@ const HomePage = () => {
           </div>
         </div>
 
+        <div className="grid grid-cols-[2fr,1fr]">
+          <Balance />
+        </div>
         {/*  GRAFICOS ETC  */}
       </div>
     </>
