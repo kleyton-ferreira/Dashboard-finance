@@ -1,4 +1,5 @@
 import {
+  Loader2Icon,
   PiggyBankIcon,
   PlusIcon,
   TrendingDownIcon,
@@ -23,7 +24,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -31,6 +31,11 @@ import {
 } from '@/components/ui/form'
 import { Input } from './input'
 import { Button } from './button'
+import { TransactionService } from '@/services/transaction'
+import { toast } from 'sonner'
+import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useAuthContext } from '@/context/auth'
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -46,24 +51,43 @@ const formSchema = z.object({
 })
 
 const AddTransactionButton = () => {
+  const queryClient = useQueryClient()
+  const { user } = useAuthContext()
+  const { mutateAsync: createTransaction, isPending } = useMutation({
+    mutationKey: ['createTransaction'],
+    mutationFn: (input) => TransactionService.create(input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['balance', user.id],
+      })
+    },
+  })
+
+  const [dialogIsOpen, setDialogIsOpen] = useState(false)
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      amount: 50,
+      amount: '',
       date: new Date(),
       type: 'EARNING',
     },
     shouldUnregister: true,
   })
 
-  const onSubmit = ({ data }) => {
-    console.log({ data })
+  const onSubmit = async (data) => {
+    try {
+      await createTransaction(data)
+      setDialogIsOpen(false)
+      toast.success('Transição criada com sucesso!')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
     <>
-      <Dialog>
+      <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
         <DialogTrigger asChild>
           <Button>
             Nova transação <PlusIcon />
@@ -155,6 +179,7 @@ const AddTransactionButton = () => {
                           <TrendingUpIcon className="text-primary-green" />
                           Ganho
                         </Button>
+
                         <Button
                           type="button"
                           variant={
@@ -165,6 +190,7 @@ const AddTransactionButton = () => {
                           <TrendingDownIcon className="text-primary-red" />
                           Gasto
                         </Button>
+
                         <Button
                           type="button"
                           variant={
@@ -185,11 +211,23 @@ const AddTransactionButton = () => {
               />
               <DialogFooter className="sm:space-x-4">
                 <DialogClose asChild>
-                  <Button type="reset" variant="secondary" className="w-full">
+                  <Button
+                    type="reset"
+                    variant="secondary"
+                    className="w-full"
+                    disabled={form.formState.isSubmitting}
+                  >
                     Cancelar
                   </Button>
                 </DialogClose>
-                <Button type="submit" className="w-full">
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting && (
+                    <Loader2Icon className="animate-spin" />
+                  )}
                   Adicionar
                 </Button>
               </DialogFooter>
