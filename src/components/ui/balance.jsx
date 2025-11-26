@@ -15,11 +15,11 @@ import { useAuthContext } from '@/context/auth'
 const Balance = () => {
   const [searchParams] = useSearchParams()
   const { user } = useAuthContext()
+  const from = searchParams.get('from') // YYY-MM-DD
+  const to = searchParams.get('to') // YYY-MM-DD
   const { data } = useQuery({
-    queryKey: ['balance', user.id],
+    queryKey: ['balance', user.id, from, to],
     queryFn: () => {
-      const from = searchParams.get('from')
-      const to = searchParams.get('to')
       return UserService.getBalance({ from, to })
     },
   })
@@ -45,7 +45,7 @@ const Balance = () => {
       <BalanceItem
         label="Investimentos"
         icon={<PiggyBankIcon className="text-primary-blue" size={16} />}
-        amaout={data?.expenses}
+        amaout={data?.investments}
       />
     </div>
   )
