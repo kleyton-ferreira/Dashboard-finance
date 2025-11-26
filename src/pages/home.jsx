@@ -1,11 +1,11 @@
+import React from 'react'
 import { useAuthContext } from '@/context/auth'
 import { Navigate } from 'react-router'
-import React from 'react'
 
 import Header from '@/components/ui/header'
 import DateSelection from '@/components/ui/data-selection'
-import { Button } from '@/components/ui/button'
-import { PlusIcon } from 'lucide-react'
+import AddTransactionButton from '@/components/ui/add-transaction-button'
+
 import Balance from '@/components/ui/balance'
 
 const HomePage = () => {
@@ -26,9 +26,7 @@ const HomePage = () => {
           <h2 className="text-xl font-bold">Dashboard</h2>
           <div className="flex items-center gap-3">
             <DateSelection />
-            <Button>
-              Nova transação <PlusIcon />
-            </Button>
+            <AddTransactionButton />
           </div>
         </div>
 
