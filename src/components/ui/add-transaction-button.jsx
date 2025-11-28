@@ -31,12 +31,9 @@ import {
 } from '@/components/ui/form'
 import { Input } from './input'
 import { Button } from './button'
-import { TransactionService } from '@/api/services/transaction'
 import { toast } from 'sonner'
 import { useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useAuthContext } from '@/context/auth'
-import { getUserBalanceQueryKey } from '@/api/hooks/user'
+import { useCreateTransaction } from '@/api/hooks/transaction'
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -52,18 +49,7 @@ const formSchema = z.object({
 })
 
 const AddTransactionButton = () => {
-  const queryClient = useQueryClient()
-  const { user } = useAuthContext()
-  const { mutateAsync: createTransaction, isPending } = useMutation({
-    mutationKey: ['createTransaction'],
-    mutationFn: (input) => TransactionService.create(input),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: getUserBalanceQueryKey({ userId: user.id }),
-        exact: false,
-      })
-    },
-  })
+  const { mutateAsync: createTransaction } = useCreateTransaction()
 
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
   const form = useForm({
