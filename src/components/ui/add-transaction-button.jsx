@@ -31,11 +31,12 @@ import {
 } from '@/components/ui/form'
 import { Input } from './input'
 import { Button } from './button'
-import { TransactionService } from '@/services/transaction'
+import { TransactionService } from '@/api/services/transaction'
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAuthContext } from '@/context/auth'
+import { getUserBalanceQueryKey } from '@/api/hooks/user'
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -58,7 +59,7 @@ const AddTransactionButton = () => {
     mutationFn: (input) => TransactionService.create(input),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['balance', user.id],
+        queryKey: getUserBalanceQueryKey({ userId: user.id }),
       })
     },
   })
