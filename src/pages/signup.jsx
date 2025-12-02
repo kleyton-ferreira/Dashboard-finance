@@ -12,7 +12,6 @@ import {
 import { Link, Navigate } from 'react-router'
 import PasswordInput from '@/components/ui/password-input'
 import { Checkbox } from '@/components/ui/checkbox'
-import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Form,
   FormField,
@@ -21,58 +20,14 @@ import {
   FormMessage,
   FormItem,
 } from '@/components/ui/form'
-import { useForm } from 'react-hook-form'
-
-import { z } from 'zod'
 
 import { useAuthContext } from '@/context/auth'
-
-const signupSchema = z
-  .object({
-    firstName: z.string().trim().min(1, {
-      message: 'O nome é obrigatório.',
-    }),
-    lastName: z.string().trim().min(1, {
-      message: 'O sobrenome é obrigatório.',
-    }),
-    email: z
-      .string()
-      .email({
-        message: 'O e-mail é inválido',
-      })
-      .trim()
-      .min(1, {
-        message: 'O e-mail é obrigatório',
-      }),
-    password: z.string().trim().min(6, {
-      message: 'A senha deve ter no mínimo 6 caracteres.',
-    }),
-    passwordConfirmation: z.string().trim().min(6, {
-      message: 'A confirmação de senha é obrigatória.',
-    }),
-    terms: z.boolean().refine((value) => value === true, {
-      message: 'Você precisa aceitar os termos.',
-    }),
-  })
-  .refine((data) => data.password === data.passwordConfirmation, {
-    message: 'As senhas não coincidem.',
-    path: ['passwordConfirmation'],
-  })
+import { useSignupForm } from '@/forms/hooks/user'
 
 const SignUp = () => {
   const { user, signup, isInicialized } = useAuthContext()
 
-  const methods = useForm({
-    resolver: zodResolver(signupSchema),
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      passwordConfirmation: '',
-      terms: false,
-    },
-  })
+  const { form } = useSignupForm()
 
   const handleSubmit = (data) => signup(data)
 
@@ -84,8 +39,8 @@ const SignUp = () => {
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center gap-3">
-      <Form {...methods}>
-        <form onSubmit={methods.handleSubmit(handleSubmit)}>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
           <Card className="w-[500px]">
             <CardHeader className="text-center">
               <CardTitle>Crie a sua Conta</CardTitle>
@@ -93,7 +48,7 @@ const SignUp = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
@@ -107,7 +62,7 @@ const SignUp = () => {
               />
 
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
@@ -121,7 +76,7 @@ const SignUp = () => {
               />
 
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
@@ -135,7 +90,7 @@ const SignUp = () => {
               />
 
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
@@ -149,7 +104,7 @@ const SignUp = () => {
               />
 
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="passwordConfirmation"
                 render={({ field }) => (
                   <FormItem>
@@ -166,7 +121,7 @@ const SignUp = () => {
               />
 
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="terms"
                 render={({ field }) => (
                   <FormItem className="items-top flex gap-2 space-y-0">
@@ -179,12 +134,12 @@ const SignUp = () => {
                     <div className="items-top= flex gap-2">
                       <FormLabel
                         htmlFor="terms"
-                        className={`text-xs text-muted-foreground opacity-75 ${methods.formState.errors.terms && 'text-red-600'}`}
+                        className={`text-xs text-muted-foreground opacity-75 ${form.formState.errors.terms && 'text-red-600'}`}
                       >
                         Ao clicar em “Criar conta”, você aceita{' '}
                         <a
                           href="#"
-                          className={`text-primary-foreground underline ${methods.formState.errors.terms && 'text-red-600'}`}
+                          className={`text-primary-foreground underline ${form.formState.errors.terms && 'text-red-600'}`}
                         >
                           nosso termo de uso e política de privacidade.
                         </a>
