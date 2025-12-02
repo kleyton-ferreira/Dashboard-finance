@@ -3,11 +3,11 @@ import { UserService } from '@/api/services/user'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 export const getUserBalanceQueryKey = ({ userId, from, to }) => {
-  console.log(['balance', userId, from, to])
+  // console.log(['balance', userId, from, to])
 
-  //   if (!from || !to) {
-  //     return ['balance', userId]
-  //   }
+  if (!from || !to) {
+    return ['balance', userId]
+  }
 
   return ['balance', userId, from, to]
 }

@@ -5,7 +5,6 @@ import {
   TrendingDownIcon,
   TrendingUpIcon,
 } from 'lucide-react'
-import { z } from 'zod'
 import { NumericFormat } from 'react-number-format'
 import { DatePicker } from './date-picker'
 
@@ -19,8 +18,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Form,
   FormControl,
@@ -33,45 +30,21 @@ import { Input } from './input'
 import { Button } from './button'
 import { toast } from 'sonner'
 import { useState } from 'react'
-import { useCreateTransaction } from '@/api/hooks/transaction'
-
-const formSchema = z.object({
-  name: z.string().trim().min(1, {
-    message: 'O nome é obrigatórito.',
-  }),
-  amount: z.number({
-    required_error: 'o valor é obrigatório.',
-  }),
-  date: z.date({
-    required_error: 'A data é obrigatório.',
-  }),
-  type: z.enum(['EARNING', 'EXPENSE', 'INVESTMENT']),
-})
+import { useCreateTransactionForm } from '@/forms/hooks/transaction'
 
 const AddTransactionButton = () => {
-  const { mutateAsync: createTransaction } = useCreateTransaction()
-
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      amount: '',
-      date: new Date(),
-      type: 'EARNING',
-    },
-    shouldUnregister: true,
-  })
-
-  const onSubmit = async (data) => {
-    try {
-      await createTransaction(data)
+  const { form, onSubmit } = useCreateTransactionForm({
+    onSuccess: () => {
       setDialogIsOpen(false)
       toast.success('Transição criada com sucesso!')
-    } catch (error) {
-      console.log(error)
-    }
-  }
+    },
+    onError: () => {
+      toast.error(
+        'Ocorreu um erro ao criar a transação. Por favor tente mais tarde!'
+      )
+    },
+  })
 
   return (
     <>
