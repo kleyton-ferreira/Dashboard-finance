@@ -23,6 +23,7 @@ import {
 
 import { useAuthContext } from '@/context/auth'
 import { useSignupForm } from '@/forms/hooks/user'
+import { Loader2Icon } from 'lucide-react'
 
 const SignUp = () => {
   const { user, signup, isInicialized } = useAuthContext()
@@ -150,7 +151,12 @@ const SignUp = () => {
               />
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Criar conta</Button>
+              <Button className="w-full" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting && (
+                  <Loader2Icon className="animate-spin" />
+                )}
+                Criar conta
+              </Button>
             </CardFooter>
           </Card>
         </form>
