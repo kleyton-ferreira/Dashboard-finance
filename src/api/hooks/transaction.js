@@ -16,11 +16,14 @@ export const useCreateTransaction = () => {
         queryKey: getUserBalanceQueryKey({ userId: user.id }),
         exact: false,
       })
+      queryClient.invalidateQueries({
+        queryKey: getTransactionsQueryKey({ userId: user.id }),
+      })
     },
   })
 }
 
-export const getTransactionsBalanceQueryKey = ({ userId, from, to }) => {
+export const getTransactionsQueryKey = ({ userId, from, to }) => {
   if (!from || !to) {
     return ['getTransactions', userId]
   }
@@ -28,10 +31,11 @@ export const getTransactionsBalanceQueryKey = ({ userId, from, to }) => {
   return ['getTransactions', userId, from, to]
 }
 
-export const useGeTansactions = ({ from, to }) => {
+export const useGetTransactions = ({ from, to }) => {
   const { user } = useAuthContext()
   return useQuery({
-    queryKey: getTransactionsBalanceQueryKey({ useId: user.id, from, to }),
+    queryKey: getTransactionsQueryKey({ useId: user.id, from, to }),
     queryFn: () => TransactionService.getAll({ from, to }),
+    enabled: Boolean(from) && Boolean(to) && Boolean(user.id),
   })
 }

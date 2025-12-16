@@ -22,7 +22,7 @@ export const TransactionService = {
    * @param {string} input.from - Data inicial ( YYY-MM-DD )
    * @param {string} input.to - Data final ( YYY-MM-DD )
    */
-  getAll: async () => {
+  getAll: async (input) => {
     const query = queryString.stringify({ from: input.from, to: input.to })
     const response = await protectedApi.get(`/transactions/me?${query}`)
     return response.data
