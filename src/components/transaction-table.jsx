@@ -2,6 +2,10 @@ import { useGetTransactions } from '@/api/hooks/transaction'
 
 import { useSearchParams } from 'react-router'
 import { DataTable } from './ui/data-table'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale/pt-BR'
+import { formatCurrency } from '@/helppers/currency'
+import TransactionTypeBadge from './transaction-type-bedge'
 
 const columns = [
   {
@@ -11,14 +15,25 @@ const columns = [
   {
     accessorKey: 'type',
     header: 'Tipo',
+    cell: ({ row: { original: transaction } }) => {
+      return <TransactionTypeBadge variant={transaction.type.toLowerCase()} />
+    },
   },
   {
     accessorKey: 'date',
     header: 'Data',
+    cell: ({ row: { original: transaction } }) => {
+      return format(new Date(transaction.date), "dd  'de' MMM 'de' yyyy", {
+        locale: ptBR,
+      })
+    },
   },
   {
     accessorKey: 'amount',
     header: 'Valor',
+    cell: ({ row: { original: transaction } }) => {
+      return formatCurrency(transaction.amount)
+    },
   },
   {
     accessorKey: 'actions',
