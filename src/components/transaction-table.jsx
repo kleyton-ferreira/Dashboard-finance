@@ -6,6 +6,8 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale/pt-BR'
 import { formatCurrency } from '@/helppers/currency'
 import TransactionTypeBadge from './transaction-type-bedge'
+import { Button } from './ui/button'
+import { ExternalLinkIcon } from 'lucide-react'
 
 const columns = [
   {
@@ -38,6 +40,13 @@ const columns = [
   {
     accessorKey: 'actions',
     header: 'Ações',
+    cell: () => {
+      return (
+        <Button variant="ghost" size="icon">
+          <ExternalLinkIcon className="text-muted-foreground" />
+        </Button>
+      )
+    },
   },
 ]
 
