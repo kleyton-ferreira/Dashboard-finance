@@ -8,6 +8,7 @@ import { formatCurrency } from '@/helppers/currency'
 import TransactionTypeBadge from './transaction-type-bedge'
 import { Button } from './ui/button'
 import { ExternalLinkIcon } from 'lucide-react'
+import { ScrollArea } from './ui/scroll-area'
 
 const columns = [
   {
@@ -56,7 +57,14 @@ const TransactionsTable = () => {
   const to = searchParams.get('to')
   const { data: transactions } = useGetTransactions({ from, to })
   if (!transactions) return null
-  return <DataTable columns={columns} data={transactions} />
+  return (
+    <>
+      <h2 className="relative top-4 text-2xl font-bold">Transações</h2>
+      <ScrollArea className="h-[500px] max-h-[500px] rounded-md border">
+        <DataTable columns={columns} data={transactions} />
+      </ScrollArea>
+    </>
+  )
 }
 
 export default TransactionsTable
